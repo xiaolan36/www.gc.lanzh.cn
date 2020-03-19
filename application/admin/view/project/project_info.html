@@ -1,0 +1,319 @@
+<!-- 公共头部-->
+
+{include file="Public/_header" title="$title"/}
+<style>
+    @media screen and (max-width: 600px) {
+
+        table {
+
+            border: 0;
+        }
+
+        table thead {
+            display: none;
+        }
+
+        table tr {
+            margin-bottom: 10px;
+
+            display: block;
+
+            border-bottom: 2px solid #ddd;
+        }
+
+        table td {
+            display: block;
+            text-align: right;
+            font-size: 14px;
+            border-bottom: 1px dotted #ccc;
+        }
+
+        table td:last-child {
+            border-bottom: 0;
+        }
+
+
+        table td:before {
+            content: attr(data-label);
+            float: left;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+    }
+</style>
+<div class="Hui-admin-article">
+    <nav class="breadcrumb" style="background-color:#fff;padding: 0 24px">
+        首页
+        <span class="c-gray en">
+            /
+        </span>
+        项目管理
+        <span class="c-gray en">
+            /
+        </span>
+        项目列表
+        <span class="c-gray en">
+            /
+        </span>
+        项目进度
+    </nav>
+    <article class="Hui-admin-content clearfix">
+        <div class="panel mt-20">
+            <div class="panel-body">
+                <div class="mt-20 clearfix">
+                    <table class="table table-border table-bordered table-bg table-hover table-sort"
+                           id="data-table-list">
+                        <thead>
+                        <tr class="text-c">
+                            <!--<th width="50">-->
+                            <!--    ID-->
+                            <!--</th>-->
+                            <th width="100">
+                                项目阶段
+                            </th>
+                            <!--<th width="120">-->
+                            <!--    归属项目-->
+                            <!--</th>-->
+                            <th width="60">
+                                执行人
+                            </th>
+                            <th width="">
+                                计划开始
+                            </th>
+                            <th width="">
+                                计划结束
+                            </th>
+                            <th width="">
+                                实际开始
+                            </th>
+                            <th width="">
+                                实际结束
+                            </th>
+                            <th width="70">
+                                预算金额
+                            </th>
+                            <th width="50">
+                                进度%
+                            </th>
+                            <th width="">
+                                项目状态
+                            </th>
+                            <!--<th width="">-->
+                            <!--    提交执行人-->
+                            <!--</th>-->
+                            <th width="100">
+                                操作
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody class="getData-list" data-currpage="1">
+                        {volist name='list' id='user' empey='暂时没有数据'}
+
+                        <tr class="text-c">
+                            <!--<td>-->
+                            <!--    {$user.id}-->
+                            <!--</td>-->
+                            <td>
+                                <b>{$user.name}</b>
+                            </td>
+                            <!--<td>-->
+                            <!--    {$user.projectname}-->
+                            <!--</td>-->
+                            <td>
+
+                                {eq name="$user.status_true" value="1"}
+                                <span class="label label-radius radius">
+                                        未提交
+                                    </span>
+                                {else/}
+                                <span class="label label-success radius">
+                                        {$user.userid}
+                                    </span>
+                                {/eq}
+                            </td>
+                            <td>
+                                {$user.plan_start_time}
+                            </td>
+                            <td>
+                                {$user.plan_end_time}
+                            </td>
+
+                            <td>
+                                {$user.start_time}
+                            </td>
+                            <td>
+                                {$user.end_time}
+                            </td>
+                            <td>
+                                {$user.price}
+                            </td>
+                            <td>
+                                {$user.speed}
+                            </td>
+                            <td class="td-status">
+                                {switch user.status}
+                                {case 1}
+                                <span class="label label-success radius">
+                                        已完成
+                                </span>
+                                {/case}
+                                {case 2}
+                                <span class="label label-radius radius">
+                                        完成、延期
+                                </span>
+                                {/case}
+                                {default /}
+                                <span class="label label-radius radius">
+                                        未完成
+                                </span>
+                                {/switch}
+
+                            </td>
+                            <!--<td class="td-status">-->
+                            <!--    {eq name="$user.status_true" value="1"}-->
+                            <!--    <span class="label label-radius radius">-->
+                            <!--            未提交-->
+                            <!--        </span>-->
+                            <!--    {else/}-->
+                            <!--    <span class="label label-success radius">-->
+                            <!--            已提交-->
+                            <!--        </span>-->
+                            <!--    {/eq}- ->
+                            <!--</td>-->
+                            <td class="f-14 td-manage">
+                                <?php  if(!isset($user['edit'])):?>
+                                <a class="ml-5 btn btn-success size-S radius" href="javascript:;"
+                                   onclick='article_edit({$user.id},{$user.p_id},{$user.type},1)'
+                                   style="text-decoration:none" title="详情">
+                                    详情
+                                </a>
+                                <a class="ml-5 btn btn-primary size-S radius" href="javascript:;"
+                                   onclick="article_edit({$user.id},{$user.p_id},{$user.type})"
+                                   style="text-decoration:none" title="编辑">
+                                    编辑
+                                </a>
+                                <?php endif;?>
+                            </td>
+                        </tr>
+                        {/volist}
+                        <th scope="col" colspan="13" style="text-align: center; color:red; font-size:18px">实际总成本 :
+                            {$sum} 元
+                        </th>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </article>
+</div>
+<script src="__ADMINPUBLIC__/lib/datatables/1.10.15/jquery.dataTables.min.js" type="text/javascript">
+</script>
+<script src="__ADMINPUBLIC__/lib/laypage/1.2/laypage.js" type="text/javascript">
+</script>
+<script src="__ADMINPUBLIC__/static/business/js/main.js" type="text/javascript">
+</script>
+<!--/请在上方写此页面业务相关的脚本-->
+<script type="text/javascript">
+
+    $(function () {
+        runDatetimePicker(); // 实例化日期控件
+        getUrlParameter(); // 获取URL参数，初始化条件
+    });
+
+    function article_edit(id, pid, type, status) {
+        if (status > 0) {
+            window.location.href = "{:url('Project/edit_project')}?ids=" + id + '&pid=' + pid + '&type=' + type + '&status=' + status;
+            return;
+        }
+        window.location.href = "{:url('Project/edit_project')}?ids=" + id + '&pid=' + pid + '&type=' + type;
+    }
+
+    function getRequest() {
+        var url = window.location.search; //获取url中"?"符后的字串
+        var theRequest = new Object();
+        if (url.indexOf("?") != -1) {
+            var str = url.substr(1);
+            strs = str.split("&");
+            for (var i = 0; i < strs.length; i++) {
+                //就是这句的问题
+                theRequest[strs[i].split("=")[0]] = decodeURI(strs[i].split("=")[1]);
+                //之前用了unescape()
+                //才会出现乱码
+            }
+        }
+        return theRequest;
+    }
+
+    // 获取URL参数，初始化条件s
+    function getUrlParameter() {
+        var urlObj = getRequest();
+        $("#classifyID").val(urlObj.classifyID);
+        $("#statusifyID").val(urlObj.statusifyID);
+        $("#statusifyIDs").val(urlObj.statusifyIDs);
+        $("#search-datetime-start").val(urlObj.start);
+        $("#search-datetime-end").val(urlObj.end);
+        $("#search-input").val(urlObj.searchInput);
+
+    }
+
+    /*资讯-删除*/
+    function article_del(id) {
+        layer.confirm('确认要删除吗？删除后不可恢复，相关资料信息也会一并清理' + id, function (index) {
+            $.ajax({
+                type: 'POST',
+                url: "{:url('Project/project_del')}",
+                dataType: 'json',
+                data: {id: id},
+                success: function (data) {
+                    if (data.code == 200) {
+                        layer.msg(data.msg, {icon: 1, shade: 0.01, time: 1000}, function () {
+                            window.location.reload();
+                        });
+                    } else {
+                        layer.msg(data.msg, {icon: 2, time: 1000});
+                    }
+
+                },
+                error: function (data) {
+                    console.log(data.msg);
+                },
+            });
+        });
+    }
+
+    /*资讯-状态修改*/
+    function article_stop(id, status) {
+
+        var msg = '';
+        if (status == 1) {
+            msg = '确定冻结吗'
+        } else {
+            msg = '确定解冻吗'
+        }
+
+        layer.confirm(msg, function (index) {
+            $.ajax({
+                type: 'POST',
+                url: "{:url('Admin/admin_status')}",
+                dataType: 'json',
+                data: {id: id, status: status},
+                success: function (data) {
+                    if (data.code == 200) {
+                        layer.msg(data.msg, {icon: 1, shade: 0.01, time: 1000}, function () {
+                            window.location.reload();
+                        });
+
+                    } else {
+                        layer.msg(data.msg, {icon: 2, time: 1000});
+                    }
+
+                },
+                error: function (data) {
+                    console.log(data.msg);
+                },
+            });
+        });
+    }
+
+</script>

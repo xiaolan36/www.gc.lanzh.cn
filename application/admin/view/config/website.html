@@ -1,0 +1,109 @@
+<!-- 公共头部-->
+{include file="Public/_header" title="$title"/}
+<div class="Hui-admin-article">
+    <nav class="breadcrumb" style="background-color:#fff;padding: 0 24px">
+        首页
+        <span class="c-gray en">
+            /
+        </span>
+        系统设置
+        <span class="c-gray en">
+            /
+        </span>
+        修改密码
+    </nav>
+    <article class="Hui-admin-page-container">
+        <form class="form form-horizontal" id="form-article-add" enctype="multipart/form-data" action="" method="post">
+            <div class="row clearfix">
+                <label class="form-label col-xs-7 col-sm-7" style="font-size: 20px"><span class="c-red">*</span>只需填写要修改的 ：</label>
+            </div>
+
+            <div class="row clearfix">
+                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>系统名称：</label>
+                <div class="form-controls col-xs-8 col-sm-9">
+                    <input type="text" class="input-text" id="info_one" name="info_one" placeholder="<?php if(isset($list['info_one']) && !empty($list['info_one'])) : ?>{$list['info_one']} <?php else : ?><?php endif; ?>">
+                </div>
+            </div>
+
+            <div class=" row clearfix">
+                    <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>版权信息：</label>
+                    <div class="form-controls col-xs-8 col-sm-9">
+                        <input type="text" class="input-text" value="" id="info_two" name="info_two" placeholder="<?php if(isset($list['info_two']) && !empty($list['info_two'])) : ?>{$list['info_two']} <?php else : ?><?php endif; ?>">
+                </div>
+            </div>
+
+            <div class=" row clearfix">
+                        <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>技术支持：</label>
+                        <div class="form-controls col-xs-8 col-sm-9">
+                            <input type="text" class="input-text"  id=" info_three" name="info_three" placeholder="<?php if(isset($list['info_three']) && !empty($list['info_three'])) : ?>{$list['info_three']} <?php else : ?><?php endif; ?>">
+                        </div>
+                    </div>
+
+                    <div class="row clearfix">
+                        <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>技术电话：</label>
+                        <div class="form-controls col-xs-8 col-sm-9">
+                            <input type="text" class="input-text" id=" info_four" name="info_four" placeholder="<?php if(isset($list['info_four']) && !empty($list['info_four'])) : ?>{$list['info_four']} <?php else : ?><?php endif; ?>">
+                        </div>
+                    </div>
+
+                    <div class="row clearfix">
+                        <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+                            <button class="btn btn-primary radius" type="submit"><i class="Hui-iconfont">&#xe632;</i> 保存
+                            </button>
+                        </div>
+                    </div>
+        </form>
+    </article>
+</div>
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="__ADMINPUBLIC__/lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+<script type="text/javascript" src="__ADMINPUBLIC__/lib/jquery.validation/1.14.0/validate-methods.js"></script>
+<script type="text/javascript" src="__ADMINPUBLIC__/lib/jquery.validation/1.14.0/messages_zh.js"></script>
+<script type="text/javascript">
+
+    $(function () {
+        // 表单提交验证
+        $("#form-article-add").validate({
+            rules: {
+                password: {
+                    required: true,
+                },
+                new_password: {
+                    required: true,
+                },
+                new_password_true: {
+                    equalTo: "#new_password"
+                },
+            },
+            onkeyup: false,
+            focusCleanup: true,
+            success: "valid",
+            submitHandler: function (form) {
+
+                $(form).ajaxSubmit({
+                    url: "{:url('Config/website')}",
+                    type: 'post',
+                    dataType: 'json',
+                    beforeSubmit: function () {
+                    },
+                    success: function (data) {
+                        if (data.code == 200) {
+                            layer.msg(data.msg, {icon: 1, shade: 0.01, time: 2000}, function () {
+                                top.location.reload();
+
+                            });
+                        } else {
+                            layer.msg(data.msg);
+                        }
+                    },
+                    clearForm: false,//禁止清楚表单
+                    resetForm: false //禁止重置表单
+
+                });
+            }
+        });
+    });
+</script>
+<!--/请在上方写此页面业务相关的脚本-->
+</body>
+</html>

@@ -1,0 +1,291 @@
+<!-- 公共头部-->
+{include file="Public/_header" title="$title"/}
+<div class="Hui-admin-article">
+    <nav class="breadcrumb" style="background-color:#fff;padding: 0 24px">
+        首页
+        <span class="c-gray en">/</span>
+        项目管理
+        <span class="c-gray en">/</span>
+        项目详情
+    </nav>
+
+    <article class="Hui-admin-page-container">
+        <form class="form form-horizontal" id="form-article-add" enctype="multipart/form-data" method="post">
+            <div class="row clearfix">
+                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>预算金额：</label>
+                <div class="form-controls col-xs-8 col-sm-9">
+                    <input type="text" class="input-text"
+                           value="<?php if(isset($list['price']) && !empty($list['price'])) : ?>{$list['price']} <?php else : ?><?php endif; ?>"
+                           placeholder="" id="price" name="price">
+                </div>
+            </div>
+
+            <div class="row clearfix">
+                <label class="form-label col-xs-4 col-sm-2">计划开始日期：</label>
+                <div class="form-controls col-xs-8 col-sm-9">
+                    <input type="text" id="plan_start_time" class="input-text datetimepicker-input"
+                           name="plan_start_time"
+                           value="<?php if(isset($list['plan_start_time']) && !empty($list['plan_start_time'])) : ?>{:date('Y-m-d H:i',$list['plan_start_time'])} <?php else : ?><?php endif; ?>">
+                </div>
+            </div>
+            <div class="row clearfix">
+                <label class="form-label col-xs-4 col-sm-2">计划结束日期：</label>
+                <div class="form-controls col-xs-8 col-sm-9">
+                    <input type="text" id="plan_end_time" class="input-text datetimepicker-input"
+                           name="plan_end_time"
+                           value="<?php if(isset($list['plan_end_time']) && !empty($list['plan_end_time'])) : ?>{:date('Y-m-d H:i',$list['plan_end_time'])} <?php else : ?><?php endif; ?>">
+                </div>
+            </div>
+            <div class="row clearfix">
+                <label class="form-label col-xs-4 col-sm-2">实际开始日期：</label>
+                <div class="form-controls col-xs-8 col-sm-9">
+                    <input type="text" id="start_time" class="input-text datetimepicker-input"
+                           name="start_time"
+                           value="<?php if(isset($list['start_time']) && !empty($list['start_time'])) : ?>{:date('Y-m-d H:i',$list['start_time'])} <?php else : ?><?php endif; ?>">
+                </div>
+            </div>
+            <div class="row clearfix">
+                <label class="form-label col-xs-4 col-sm-2">实际结束日期：</label>
+                <div class="form-controls col-xs-8 col-sm-9">
+                    <input type="text" id="end_time" class="input-text datetimepicker-input"
+                           name="end_time"
+                           value="<?php if(isset($list['end_time']) && !empty($list['end_time'])) : ?>{:date('Y-m-d H:i',$list['end_time'])} <?php else : ?><?php endif; ?>">
+                </div>
+            </div>
+            <div class="row clearfix">
+                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>进度状态(%)：</label>
+                <div class="form-controls col-xs-8 col-sm-9">
+                    <input type="number" max="100" min="0" class="input-text"   id="speed"
+                           name="speed" value="<?php if(isset($list['speed']) && !empty($list['speed'])) : ?>{$list['speed']} <?php else : ?><?php endif; ?>">
+                </div>
+            </div>
+            <div class="row clearfix">
+                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>状态情况：</label>
+                <div class="form-controls col-xs-8 col-sm-9">
+					<span class="select-box">
+						<select name="status" class="select">
+							<option value="1"
+                            <?php if(isset($list['status']) && !empty($list['status']) && $list['status']==1) : ?>
+                            selected<?php else : ?><?php endif; ?>>已完成</option>
+                            <option value="2"
+                            <?php if(isset($list['status']) && !empty($list['status']) && $list['status']==2) : ?>
+                            selected<?php else : ?><?php endif; ?>>完成,延期</option>
+                            <option value="3"
+                            <?php if(isset($list['status']) && !empty($list['status']) && $list['status']==3) : ?>
+                            selected<?php else : ?><?php endif; ?>>未完成</option>
+						</select>
+					</span>
+                </div>
+            </div>
+
+            <?php if(isset($list['uploads']) && !empty($list['uploads'])) : ?>
+
+            <div class="row clearfix">
+                <label class="form-label col-xs-4 col-sm-2">附件：</label>
+                <div class="form-controls col-xs-8 col-sm-9">
+                    {foreach $list.uploads as $key=>$vo }
+                    <p>
+                        <a download href="../../uploads/{$vo}">
+                            {$vo} <span class=" btn btn-primary size-S radius">下载</span>
+                        </a>
+
+                    </p>
+                    {/foreach}
+                </div>
+            </div>
+            <?php endif; ?>
+
+            <?php if(isset($list['status_true']) && !empty($list['status_true']  && $list['status_true']==1 && !isset($list['hide']))) :?>
+            <div class="row clearfix">
+                <label class="form-label col-xs-4 col-sm-2">附件：</label>
+                <div class="form-controls col-xs-8 col-sm-9">
+					<span class="btn-upload">
+						<a href="javascript:void();" class="btn btn-primary radius btn-upload"><i class="Hui-iconfont">&#xe642;</i> 选择文件(按CTRL键可多文件上传)</a><span>/*总文件大小不超过50MB*/</span>
+						<input type="file" multiple name="uploads[]" id="btn-upload-file-thumb"
+                               class="input-file" onchange='reads(this)'>
+
+					</span>
+                    <ul id="files">
+
+                    </ul>
+                </div>
+            </div>
+
+            <?php endif; ?>
+
+            <div class="row clearfix">
+                <label class="form-label col-xs-4 col-sm-2"><span class="c-red">*</span>备注：</label>
+                <div class="form-controls col-xs-8 col-sm-9">
+                    <textarea cols="" rows="" class="textarea textarea-article" placeholder="说点什么...最少输入10个字符"
+                              name="remarks"> <?php if(isset($list['remarks']) && !empty($list['remarks'])) : ?>{$list['remarks']} <?php else : ?><?php endif; ?> </textarea>
+                </div>
+            </div>
+
+            <?php if(isset($list['status_true']) && !empty($list['status_true']  && $list['status_true']==1  && !isset($list['hide']) )) : ?>
+            <div class="row clearfix">
+                <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+                    <button class="btn btn-primary radius" type="submit"><i class="Hui-iconfont">&#xe632;</i>保存
+                    </button>
+                    <input class="btn btn-success radius" type="submit" name="yes" value="提交到下一个执行人">
+                    <input name="id" type="hidden" value="{$list.id}">
+                </div>
+            </div>
+
+            <?php elseif(isset($list['hide'])) : ?>
+            <div class="row clearfix">
+                <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+                    <span class="label label-default  radius"></span>
+                </div>
+            </div>
+            <?php else : ?>
+
+            <div class="row clearfix">
+
+                <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-2">
+                    <input name="id" type="hidden" value="{$list.id}">
+                    <button class="btn btn-primary radius" type="submit"><i class="Hui-iconfont">&#xe632;</i>保存
+                    </button>
+                    <span class="label label-default  radius">已提交至下一个执行人</span>
+                </div>
+            </div>
+            <?php endif; ?>
+        </form>
+    </article>
+</div>
+</section>
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="__ADMINPUBLIC__/lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+<script type="text/javascript" src="__ADMINPUBLIC__/lib/jquery.validation/1.14.0/validate-methods.js"></script>
+<script type="text/javascript" src="__ADMINPUBLIC__/lib/jquery.validation/1.14.0/messages_zh.js"></script>
+<script type="text/javascript" src="__ADMINPUBLIC__/static/business/js/main.js"></script>
+<script type="text/javascript">
+
+    function reads(obj) {
+        var t_files = obj.files;
+        var str = '';
+        for (var i = 0, len = t_files.length; i < len; i++) {
+            console.log(t_files[i]);
+            str += '<p>' + (i + 1) + ',<span style="color: red;font-size: 18px">文件名：</span>' + t_files[i].name + '<span style="color: red;font-size: 18px">大小：</span>' + bytesToSize(parseInt(t_files[i].size)) + '</p>';
+        }
+        ;
+        $('#files').html(str);
+    }
+
+    var size = '8164674';
+
+    function bytesToSize(bytes) {
+        if (bytes === 0) return '0 B';
+        var k = 1000, // or 1024
+            sizes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
+            i = Math.floor(Math.log(bytes) / Math.log(k));
+
+        return (bytes / Math.pow(k, i)).toPrecision(3) + ' ' + sizes[i];
+    }
+
+    console.log(bytesToSize(parseInt(size)));
+
+    $(function () {
+        $("#plan_start_time").datetimepicker({
+            format: 'yyyy-mm-dd hh:ii',
+            minView: "month",
+            todayBtn: 1,
+            autoclose: 1,
+            language: 'zh-CN',
+            endDate: new Date(),
+        }).on('changeDate', function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+            var startTime = event.date;
+            $('#search-datetime-end').datetimepicker('setStartDate', startTime);
+        });
+        $("#plan_end_time").datetimepicker({
+            format: 'yyyy-mm-dd hh:ii',
+            minView: "month",
+            todayBtn: 1,
+            autoclose: 1,
+        }).on('changeDate', function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+            var endTime = event.date;
+            $("#search-datetime-start").datetimepicker('setEndDate', endTime);
+        });
+        $("#start_time").datetimepicker({
+            format: 'yyyy-mm-dd hh:ii',
+            minView: "month",
+            todayBtn: 1,
+            autoclose: 1,
+            endDate: new Date(),
+        }).on('changeDate', function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+            var startTime = event.date;
+            $('#search-datetime-end').datetimepicker('setStartDate', startTime);
+        });
+        $("#end_time").datetimepicker({
+            format: 'yyyy-mm-dd hh:ii',
+            minView: "month",
+            todayBtn: 1,
+            autoclose: 1,
+        }).on('changeDate', function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+            var endTime = event.date;
+            $("#search-datetime-start").datetimepicker('setEndDate', endTime);
+        });
+
+        $("#form-article-add").validate({
+            rules: {
+                // price: {
+                //     required: true,
+                // },
+                // plan_start_time: {
+                //     required: true,
+                // },
+                // plan_end_time: {
+                //     required: true,
+                // },
+                // start_time: {
+                //     required: true,
+                // },
+                // end_time: {
+                //     required: true,
+                // },
+                // speed: {
+                //     required: true,
+                // },
+                // status: {
+                //     required: true,
+                // },
+
+            },
+            onkeyup: false,
+            focusCleanup: true,
+            success: "valid",
+            submitHandler: function (form) {
+                $(form).ajaxSubmit({
+                    url: "{:url('Project/save_project')}",
+                    type: 'post',
+                    dataType: 'json',
+                    beforeSubmit: function () {
+                    },
+                    success: function (data) {
+                        if (data.code == 200) {
+                            layer.msg(data.msg, {icon: 1, shade: 0.01, time: 2000}, function () {
+                                window.location.reload();
+                            });
+                        } else {
+                            layer.msg(data.msg);
+                        }
+                    },
+                    clearForm: false,//禁止清楚表单
+                    resetForm: false //禁止重置表单
+
+                });
+            }
+        });
+    });
+</script>
+<!--/请在上方写此页面业务相关的脚本-->
+</body>
+</html>

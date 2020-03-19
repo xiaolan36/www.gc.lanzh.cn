@@ -1,0 +1,63 @@
+==================================================================
+E3 8G 240G SSD(备份)
+110.173.53.202到206
+账号 root 密码 jzfc@73e
+
+Bt-Panel: http://110.173.53.202:8888/dd257175              惠万佳从服务器
+username: ijplmr2t
+password: b68d5825
+==================================================================
+
+==================================================================
+E5双CPU双硬盘 32G（主）
+180.178.35.162到166
+账号 root 密码 jzfc@73e
+
+Bt-Panel: http://180.178.35.162:6352/bd50fe9f               惠万佳主服务器 
+username: vyvjmnae
+password: fedc03f0
+==================================================================
+
+
+==================================================================
+Congratulations! Installed successfully!
+
+Bt-Panel: http://156.224.69.138:5000/75944b31
+username: 3jjz61e9
+password: fb488c4cgroup                                            百万从服务器
+登录IP地址：156.224.69.138
+默认账号：root
+默认密码：IZBzkw65
+==================================================================
+
+==================================================================
+Bt-Panel-URL: http://23.248.195.170:5000/f0d63b09
+username: lgqmfmvt
+password: 223e4e71				百万主服务器
+Warning:
+If you cannot access the panel,
+release the following port (8888|888|80|443|20|21) in the security group
+==================================================================
+
+
+
+qd_cf 
+qd_min
+qd_nd
+qd_yjjc
+qd_minmoney
+min_recharge
+mix_withdraw
+max_withdraw
+team_oneyj
+team_twoyj
+team_threeyj
+start
+end
+level1
+level2
+level3
+level5
+level5
+app_link
+kefu_link

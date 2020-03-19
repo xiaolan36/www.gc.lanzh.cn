@@ -1,0 +1,97 @@
+<!-- 公共头部-->
+{include file="Public/_header" title="$title"/}
+<div class="Hui-admin-article">
+    <nav class="breadcrumb" style="background-color:#fff;padding: 0 24px">
+        首页
+        <span class="c-gray en">
+            /
+        </span>
+        项目管理
+        <span class="c-gray en">
+            /
+        </span>
+        项目流程
+    </nav>
+    <article class="clearfix pd-20">
+        <form action="" method="post" class="form form-horizontal" id="role_from">
+            <div class="row clearfix">
+                {foreach $menu as $k=>$v }
+                <div class="form-controls col-xs-12 col-sm-12">
+                    <dl class="Hui-admin-permission-list">
+                        <dt>
+                            <label>
+                                {$v.type_id}.{$v.name}
+                            </label>
+                        </dt>
+                        <dd>
+                            <dl class="clearfix Hui-admin-permission-list2 Huialert-success">
+                                <dd style="margin-left: 10px;">
+                                    {foreach $list as $key=>$vo }
+                                    <label class="">
+                                        <input type="checkbox" name="{$v.input_name}_{$v.type_id}[]" value="{$vo.id}"
+                                        <?php if(in_array($v['type_id'],$vo['auth'])) : ?> checked <?php else : ?><?php endif; ?>>
+                                        {$vo.name}
+                                    </label>
+                                    {/foreach}
+                                </dd>
+                            </dl>
+                        </dd>
+                    </dl>
+                </div>
+                {/foreach}
+            </div>
+            <div class="row clearfix">
+                <div class="col-xs-12 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+                    <button type="submit" class="btn btn-success radius"><i
+                            class="icon-ok"></i> 保存提交
+                    </button>
+                </div>
+            </div>
+        </form>
+    </article>
+</div>
+
+<!--请在下方写此页面业务相关的脚本-->
+<script type="text/javascript" src="__ADMINPUBLIC__/lib/jquery.validation/1.14.0/jquery.validate.js"></script>
+<script type="text/javascript" src="__ADMINPUBLIC__/lib/jquery.validation/1.14.0/validate-methods.js"></script>
+<script type="text/javascript" src="__ADMINPUBLIC__/lib/jquery.validation/1.14.0/messages_zh.js"></script>
+<!--/请在上方写此页面业务相关的脚本-->
+<script type="text/javascript">
+
+    $(function () {
+
+        $("#role_from").validate({
+
+            onkeyup: false,
+            focusCleanup: true,
+            success: "valid",
+            submitHandler: function (form) {
+                $('#role_from').ajaxSubmit({
+                    type: 'post',
+                    dataType: 'json',
+                    url: "{:url('Project/project_auth')}",
+                    success: function (data) {
+                        if (data.code == 200) {
+                            layer.msg(data.msg, {
+                                    icon: 1,
+                                    shade: 0.01,
+                                    time: 2000
+                                },
+                                function () {
+                                    top.location.reload();
+
+                                });
+                        } else {
+                            layer.msg(data.msg);
+                        }
+                    },
+                    error: function (e) {
+                        console.log(e)
+                    }
+                });
+            }
+        });
+    });
+</script>
+</body>
+</html>
