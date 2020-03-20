@@ -95,15 +95,18 @@ class Common extends Controller
                 'start'       => 'date' ,
                 'end'         => 'date' ,
                 'searchInput' => 'chsDash' ,
+                'p_id'        => 'number' ,
             ) ,
             //添加项目
             'add_project'        => array (
                 'name|项目名称' => 'chsDash' ,
+                'p_id|项目分类' => 'number' ,
             ) ,
             //修改项目昵称
             'name_edit_project'  => array (
                 'name|项目名称' => 'chsDash' ,
                 'id'        => 'number' ,
+                'p_id|项目分类' => 'number' ,
             ) ,
             //项目分类
             'project_class'      => array (

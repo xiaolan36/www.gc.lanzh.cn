@@ -20,6 +20,27 @@
                         <div class="col-xs-12 col-sm-3 col-md-3">
                             <div class="row clearfix mb-10">
                                 <span class="col-xs-4 form-item-label">
+                                    分类：
+                                </span>
+                                <span class="col-xs-8 form-item-control">
+                                    <span class="select-box">
+                                        <select class="select" id="p_id" name="p_id">
+                                            <option value="0">
+                                                全部分类
+                                            </option>
+                                            {volist name="menu" id="data"}
+                                            <option value="{$data.id}">
+                                                {$data.name}
+                                            </option>
+                                            {/volist}
+                                        </select>
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-3 col-md-3">
+                            <div class="row clearfix mb-10">
+                                <span class="col-xs-4 form-item-label">
                                     状态：
                                 </span>
                                 <span class="col-xs-8 form-item-control">
@@ -43,7 +64,6 @@
                                 <span class="col-xs-8 form-item-control">
                                     <input class="input-text datetimepicker-input" id="search-datetime-start"
                                            name="start" type="text">
-                                    </input>
                                 </span>
                             </div>
                         </div>
@@ -55,7 +75,6 @@
                                 <span class="col-xs-8 form-item-control">
                                     <input class="input-text datetimepicker-input" id="search-datetime-end" name="end"
                                            type="text">
-                                    </input>
                                 </span>
                             </div>
                         </div>
@@ -113,6 +132,9 @@
                                 ID
                             </th>
                             <th width="">
+                                项目分类
+                            </th>
+                            <th width="">
                                 项目名称
                             </th>
                             <th width="">
@@ -140,6 +162,9 @@
                                 {$user.id}
                             </td>
                             <td>
+                                {$user.p_id}
+                            </td>
+                            <td>
                                 {$user.name}
                             </td>
                             <td>
@@ -165,16 +190,19 @@
 
                             <td class="f-14 td-manage">
 
-                                <a class="btn btn-success size-S radius" href="javascript:;" onclick="article_edit({$user.id})"
+                                <a class="btn btn-success size-S radius" href="javascript:;"
+                                   onclick="article_edit({$user.id})"
                                    title="项目列表">查看状态
                                 </a>
-                                <a class="ml-5 btn btn-primary size-S radius" href="javascript:;" onclick="article_edit_name({$user.id})"
+                                <a class="ml-5 btn btn-primary size-S radius" href="javascript:;"
+                                   onclick="article_edit_name({$user.id})"
                                    style="text-decoration:none" title="编辑">
                                     <i class="Hui-iconfont">
                                         编辑
                                     </i>
                                 </a>
-                                <a class="ml-5 btn btn-danger size-S radius" href="javascript:;" onclick='article_del("{$user.id}")'
+                                <a class="ml-5 btn btn-danger size-S radius" href="javascript:;"
+                                   onclick='article_del("{$user.id}")'
                                    style="text-decoration:none" title="删除">
                                     <i class="Hui-iconfont">
                                         删除

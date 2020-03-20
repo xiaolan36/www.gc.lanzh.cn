@@ -125,10 +125,7 @@
                                 {$user.addtime|date='Y-m-d H:i'}
                             </td>
                             <td class="f-14 td-manage">
-                                <a class="btn btn-success size-S radius" href="javascript:;"
-                                   onclick="article_edit({$user.id})"
-                                   title="项目列表">查看详情
-                                </a>
+
                                 <a class="ml-5 btn btn-primary size-S radius" href="javascript:;"
                                    onclick="article_edit_name({$user.id})"
                                    style="text-decoration:none" title="编辑">
@@ -173,10 +170,6 @@
 
     function article_edit_name(id) {
         window.location.href = "{:url('Project/class_edit_project')}?ids=" + id;
-    }
-
-    function article_edit(id) {
-        window.location.href = "{:url('Project/project_info')}?ids=" + id;
     }
 
     function getRequest() {

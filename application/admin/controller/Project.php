@@ -23,10 +23,16 @@ class Project extends Common
         $map   = [];
         if ( !empty($param) ) {
 
+            //分类不为空
+            if ( isset($param[ 'p_id' ]) && !empty($param[ 'p_id' ]) ) {
+                $map[] = [ 'p_id' , 'eq' , $param[ 'p_id' ] ];
+            }
+
             //状态不为空
             if ( isset($param[ 'statusifyID' ]) && !empty($param[ 'statusifyID' ]) ) {
                 $map[] = [ 'status' , 'eq' , $param[ 'statusifyID' ] ];
             }
+
             //搜索内容不为空
             if ( isset($param[ 'searchInput' ]) && !empty($param[ 'searchInput' ]) ) {
                 $map[] = [ 'name' , 'like' , "%{$param[ 'searchInput' ]}%" ];
@@ -58,10 +64,14 @@ class Project extends Common
             else {
                 $item[ 'speed' ] = ( $num * 10 ) . '%';
             }
+            $item[ 'p_id' ] = Db ::name ('project_class') -> where ('id' , $item[ 'p_id' ]) -> value ('name');
             return $item;
         });
+
+        $menu = Db ::name ('project_class') -> select ();
         return $this -> fetch ('index' , [
             'list'   => $list ,
+            'menu'   => $menu ,
             'title'  => '项目管理' ,
             'title2' => '项目列表' ,
         ]);
@@ -109,62 +119,6 @@ class Project extends Common
             'title'  => '项目管理' ,
             'title2' => '分类管理' ,
         ]);
-    }
-
-    /**
-     *添加项目
-     * User: lanzh
-     * Date: 2020/3/3 14:55
-     */
-    public function add_project ()
-    {
-
-        if ( $this -> request -> isAjax () ) {
-
-            if ( Db ::name ('project') -> where ('name' , $this -> params[ 'name' ]) -> find () ) {
-                $this -> return_msg (400 , '该项目已存在');
-            }
-            $data[ 'name' ]    = $this -> params[ 'name' ];
-            $data[ 'speed' ]   = '暂无进度';
-            $data[ 'price' ]   = 0;
-            $data[ 'status' ]  = 1;
-            $data[ 'addtime' ] = time ();
-
-            Db ::startTrans ();
-
-            try {
-                $id = Db ::name ('project') -> insertGetId ($data);
-                unset($data);
-                $info = Db ::name ('project_menu') -> order ('id' , 'asc') -> select ();
-                foreach ( $info as $key => $val ) {
-                    $data[] = array (
-                        'name'        => $val[ 'name' ] ,
-                        'type'        => $val[ 'type_id' ] ,
-                        'p_id'        => $id ,
-                        'price'       => 0 ,
-                        'speed'       => '未开始' ,
-                        'status'      => '3' ,
-                        'status_true' => 1 ,
-                    );
-                }
-
-                Db ::name ('project_info') -> insertAll ($data);
-                Db ::commit ();
-                $this -> return_msg (200 , '添加成功');
-
-            } catch ( Exception $exception ) {
-
-                Db ::rollback ();
-                $this -> result (400 , '添加失败');
-            }
-        }
-        else {
-
-            return $this -> fetch ('add_project' , [
-                'title'  => '项目管理' ,
-                'title2' => '项目列表' ,
-            ]);
-        }
     }
 
     /**
@@ -260,6 +214,63 @@ class Project extends Common
     }
 
     /**
+     *添加项目
+     * User: lanzh
+     * Date: 2020/3/3 14:55
+     */
+    public function add_project ()
+    {
+
+        if ( $this -> request -> isAjax () ) {
+            if ( Db ::name ('project') -> where ('name' , $this -> params[ 'name' ]) -> find () ) {
+                $this -> return_msg (400 , '该项目已存在');
+            }
+            $data[ 'name' ]    = $this -> params[ 'name' ];
+            $data[ 'speed' ]   = '暂无进度';
+            $data[ 'price' ]   = 0;
+            $data[ 'status' ]  = 1;
+            $data[ 'addtime' ] = time ();
+            $data[ 'p_id' ]    = $this -> params[ 'p_id' ];;
+
+            Db ::startTrans ();
+
+            try {
+                $id = Db ::name ('project') -> insertGetId ($data);
+                unset($data);
+                $info = Db ::name ('project_menu') -> order ('id' , 'asc') -> select ();
+                foreach ( $info as $key => $val ) {
+                    $data[] = array (
+                        'name'        => $val[ 'name' ] ,
+                        'type'        => $val[ 'type_id' ] ,
+                        'p_id'        => $id ,
+                        'price'       => 0 ,
+                        'speed'       => '未开始' ,
+                        'status'      => '3' ,
+                        'status_true' => 1 ,
+                    );
+                }
+
+                Db ::name ('project_info') -> insertAll ($data);
+                Db ::commit ();
+                $this -> return_msg (200 , '添加成功');
+
+            } catch ( Exception $exception ) {
+
+                Db ::rollback ();
+                $this -> result (400 , '添加失败');
+            }
+        }
+        else {
+            $list = Db ::name ('project_class') -> select ();
+            return $this -> fetch ('add_project' , [
+                'list'   => $list ,
+                'title'  => '项目管理' ,
+                'title2' => '项目列表' ,
+            ]);
+        }
+    }
+
+    /**
      *修改项目
      * User: lanzh
      * Date: 2020/3/3 14:55
@@ -269,11 +280,12 @@ class Project extends Common
 
         if ( $this -> request -> isAjax () ) {
 
-            if ( Db ::name ('project') -> where ('name' , $this -> params[ 'name' ]) -> find () ) {
-                $this -> return_msg (400 , '该项目已存在');
-            }
-
-            if ( Db ::name ('project') -> where ('id' , $this -> params[ 'id' ]) -> update (array ( 'name' => $this -> params[ 'name' ] )) ) {
+            if (
+            Db ::name ('project') -> where ('id' , $this -> params[ 'id' ]) -> update (array (
+                'name' => $this -> params[ 'name' ] ,
+                'p_id' => $this -> params[ 'p_id' ]
+            ))
+            ) {
                 $this -> return_msg (200 , '修改成功');
             }
             else {
@@ -284,9 +296,11 @@ class Project extends Common
         else {
 
             $param = $this -> params;
+            $menu  = Db ::name ('project_class') -> select ();
             $list  = Db ::name ('project') -> where ('id' , $param[ 'ids' ]) -> find ();
             return $this -> fetch ('name_edit_project' , [
                 'list'   => $list ,
+                'menu'   => $menu ,
                 'title'  => '项目管理' ,
                 'title2' => '项目列表' ,
             ]);
