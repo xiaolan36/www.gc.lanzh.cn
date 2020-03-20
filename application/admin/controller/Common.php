@@ -90,42 +90,55 @@ class Common extends Controller
         //项目管理
         'Project' => array (
             //项目列表
-            'index'             => array (
-                'statusifyID' => 'number' ,
-                'start'       => 'date' ,
-                'end'         => 'date' ,
-                'searchInput' => 'chsDash' ,
-            ) ,
-            //项目列表
-            'project_class'             => array (
+            'index'              => array (
                 'statusifyID' => 'number' ,
                 'start'       => 'date' ,
                 'end'         => 'date' ,
                 'searchInput' => 'chsDash' ,
             ) ,
             //添加项目
-            'add_project'       => array (
+            'add_project'        => array (
                 'name|项目名称' => 'chsDash' ,
             ) ,
             //修改项目昵称
-            'name_edit_project' => array (
+            'name_edit_project'  => array (
                 'name|项目名称' => 'chsDash' ,
                 'id'        => 'number' ,
             ) ,
-            //项目流程
-            'project_auth'      => array () ,
-            //删除项目
-            'project_del'       => array (
+            //项目分类
+            'project_class'      => array (
+                'statusifyID' => 'number' ,
+                'start'       => 'date' ,
+                'end'         => 'date' ,
+                'searchInput' => 'chsDash' ,
+            ) ,
+            //添加分类
+            'add_class_project'  => array (
+                'name|分类名称' => 'chsDash' ,
+            ) ,
+            //修改分类昵称
+            'class_edit_project' => array (
+                'name|分类名称' => 'chsDash' ,
+                'id'        => 'number' ,
+            ) ,
+            //删除分类
+            'class_del_project'  => array (
                 'id' => 'require|number' ,
             ) ,
-            'project_info'      => array (
+
+            //项目流程
+            'project_auth'       => array () ,
+            //删除项目
+            'project_del'        => array (
+                'id' => 'require|number' ,
+            ) ,
+            'project_info'       => array (
                 'ids' => 'require|number' ,
             ) ,
-            'edit_project'      => array (
+            'edit_project'       => array (
                 'ids' => 'require|number' ,
             ) ,
-            'save_project'      => array (
-            ) ,
+            'save_project'       => array () ,
 
         ) ,
         'Config'  => array (

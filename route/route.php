@@ -46,11 +46,14 @@ Route ::group ('admin/project' , function () {
     Route ::rule ('add_project' , 'admin/project/add_project' , 'GET|POST');
     Route ::rule ('project_auth' , 'admin/project/project_auth' , 'GET|POST');
     Route ::rule ('name_edit_project' , 'admin/project/name_edit_project' , 'GET|POST');
-    Route ::post ('project_project' , 'admin/project/project_del');
+    Route ::post ('project_del' , 'admin/project/project_del');
     Route ::get ('project_info' , 'admin/project/project_info');
     Route ::get ('edit_project' , 'admin/project/edit_project');
     Route ::post ('save_project' , 'admin/project/save_project');
     Route ::get ('project_class' , 'admin/project/project_class');
+    Route ::rule ('add_class_project' , 'admin/project/add_class_project' , 'GET|POST');
+    Route ::rule ('class_edit_project' , 'admin/project/class_edit_project' , 'GET|POST');
+    Route ::post ('class_del_project' , 'admin/project/class_del_project');
 
 });
 

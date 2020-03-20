@@ -17,7 +17,7 @@ class Project extends Common
      * User: lanzh
      * Date: 2020/2/20 17:47
      */
-    public function project_class ()
+    public function index ()
     {
         $param = $this -> params;
         $map   = [];
@@ -26,13 +26,10 @@ class Project extends Common
             //状态不为空
             if ( isset($param[ 'statusifyID' ]) && !empty($param[ 'statusifyID' ]) ) {
                 $map[] = [ 'status' , 'eq' , $param[ 'statusifyID' ] ];
-
             }
             //搜索内容不为空
             if ( isset($param[ 'searchInput' ]) && !empty($param[ 'searchInput' ]) ) {
-
                 $map[] = [ 'name' , 'like' , "%{$param[ 'searchInput' ]}%" ];
-
             }
 
             //时间戳不为空
@@ -48,10 +45,9 @@ class Project extends Common
                     $map[] = [ 'addtime' , 'between' , "$a,$b" ];
                 }
             }
-
         }
 
-        $list = Db ::name ('project_class') -> where ($map) -> order ('id' , 'asc') -> paginate (20 , false , [ 'query' => request () -> param () ]) -> each (function ( $item , $key ) {
+        $list = Db ::name ('project') -> where ($map) -> order ('id' , 'asc') -> paginate (20 , false , [ 'query' => request () -> param () ]) -> each (function ( $item , $key ) {
             $num = Db ::name ('project_info') -> where (array (
                 'p_id'        => $item[ 'id' ] ,
                 'status_true' => 2
@@ -72,26 +68,19 @@ class Project extends Common
     }
 
     /**
-     *项目列表主页
+     *项目分类
      * User: lanzh
      * Date: 2020/2/20 17:47
      */
-    public function index ()
+    public function project_class ()
     {
         $param = $this -> params;
         $map   = [];
         if ( !empty($param) ) {
 
-            //状态不为空
-            if ( isset($param[ 'statusifyID' ]) && !empty($param[ 'statusifyID' ]) ) {
-                $map[] = [ 'status' , 'eq' , $param[ 'statusifyID' ] ];
-
-            }
             //搜索内容不为空
             if ( isset($param[ 'searchInput' ]) && !empty($param[ 'searchInput' ]) ) {
-
                 $map[] = [ 'name' , 'like' , "%{$param[ 'searchInput' ]}%" ];
-
             }
 
             //时间戳不为空
@@ -107,7 +96,6 @@ class Project extends Common
                     $map[] = [ 'addtime' , 'between' , "$a,$b" ];
                 }
             }
-
         }
 
         $list = Db ::name ('project_class') -> where ($map) -> order ('id' , 'asc') -> paginate (20 , false , [ 'query' => request () -> param () ]) -> each (function ( $item , $key ) {
@@ -119,7 +107,7 @@ class Project extends Common
         return $this -> fetch ('project_class' , [
             'list'   => $list ,
             'title'  => '项目管理' ,
-            'title2' => '项目列表' ,
+            'title2' => '分类管理' ,
         ]);
     }
 
@@ -180,7 +168,99 @@ class Project extends Common
     }
 
     /**
-     *添加项目
+     *添加分类
+     * User: lanzh
+     * Date: 2020/3/3 14:55
+     */
+    public function add_class_project ()
+    {
+
+        if ( $this -> request -> isAjax () ) {
+
+            if ( Db ::name ('project_class') -> where ('name' , $this -> params[ 'name' ]) -> find () ) {
+                $this -> return_msg (400 , '该项目已存在');
+            }
+
+            $data[ 'name' ]    = $this -> params[ 'name' ];
+            $data[ 'addtime' ] = time ();
+
+            $result = Db ::name ('project_class') -> insert ($data);
+            if ( $result ) {
+                $this -> return_msg (200 , '添加成功');
+            }
+            else {
+                $this -> result (400 , '添加失败');
+            }
+        }
+        else {
+
+            return $this -> fetch ('add_class_project' , [
+                'title'  => '项目管理' ,
+                'title2' => '分类管理' ,
+            ]);
+        }
+    }
+
+    /**
+     *修改分类
+     * User: lanzh
+     * Date: 2020/3/3 14:55
+     */
+    public function class_edit_project ()
+    {
+
+        if ( $this -> request -> isAjax () ) {
+
+            if ( Db ::name ('project_class') -> where ('name' , $this -> params[ 'name' ]) -> find () ) {
+                $this -> return_msg (400 , '该项目已存在');
+            }
+
+            if ( Db ::name ('project_class') -> where ('id' , $this -> params[ 'id' ]) -> update (array ( 'name' => $this -> params[ 'name' ] )) ) {
+                $this -> return_msg (200 , '修改成功');
+            }
+            else {
+                $this -> return_msg (400 , '修改失败');
+            }
+
+        }
+        else {
+
+            $param = $this -> params;
+            $list  = Db ::name ('project_class') -> where ('id' , $param[ 'ids' ]) -> find ();
+            return $this -> fetch ('class_edit_project' , [
+                'list'   => $list ,
+                'title'  => '项目管理' ,
+                'title2' => '分类管理' ,
+            ]);
+        }
+    }
+
+    /**
+     * 删除分类
+     *
+     * @param int $[id] [<项目 id>]
+     *
+     * @return [json] [删除结果]
+     */
+    public function class_del_project ()
+    {
+        $param = $this -> params;
+        $num   = Db ::name ('project') -> where ('p_id' , $param[ 'id' ]) -> count ();
+        if ( $num > 0 ) {
+            $this -> return_msg (400 , '删除失败,该分类下已有项目无法删除');
+        }
+        else {
+            if ( Db ::name ('project_class') -> delete ($param[ 'id' ]) ) {
+                $this -> return_msg (200 , '已删除');
+            }
+            else {
+                $this -> return_msg (200 , '删除失败');
+            }
+        }
+    }
+
+    /**
+     *修改项目
      * User: lanzh
      * Date: 2020/3/3 14:55
      */
