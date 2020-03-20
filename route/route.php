@@ -50,6 +50,7 @@ Route ::group ('admin/project' , function () {
     Route ::get ('project_info' , 'admin/project/project_info');
     Route ::get ('edit_project' , 'admin/project/edit_project');
     Route ::post ('save_project' , 'admin/project/save_project');
+    Route ::get ('project_class' , 'admin/project/project_class');
 
 });
 
@@ -58,3 +59,5 @@ Route ::group ('admin/config' , function () {
     Route ::rule ('website' , 'admin/config/website' , 'GET|POST');
 
 });
+
+

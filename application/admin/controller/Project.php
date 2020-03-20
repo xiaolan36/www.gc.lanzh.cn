@@ -11,6 +11,66 @@ header ("Content-type: text/html; charset=utf-8");
 
 class Project extends Common
 {
+
+    /**
+     *项目列表主页
+     * User: lanzh
+     * Date: 2020/2/20 17:47
+     */
+    public function project_class ()
+    {
+        $param = $this -> params;
+        $map   = [];
+        if ( !empty($param) ) {
+
+            //状态不为空
+            if ( isset($param[ 'statusifyID' ]) && !empty($param[ 'statusifyID' ]) ) {
+                $map[] = [ 'status' , 'eq' , $param[ 'statusifyID' ] ];
+
+            }
+            //搜索内容不为空
+            if ( isset($param[ 'searchInput' ]) && !empty($param[ 'searchInput' ]) ) {
+
+                $map[] = [ 'name' , 'like' , "%{$param[ 'searchInput' ]}%" ];
+
+            }
+
+            //时间戳不为空
+            if ( isset($param[ 'start' ]) && isset($param[ 'end' ]) && !empty($param[ 'start' ]) && !empty($param[ 'end' ]) ) {
+                $a     = strtotime ($param[ 'start' ]);
+                $b     = strtotime ($param[ 'end' ]) + 86400;
+                $map[] = [ 'addtime' , 'between' , "$a,$b" ];
+            }
+            else {
+                if ( isset($param[ 'start' ]) && !empty($param[ 'start' ]) ) {
+                    $a     = strtotime ($param[ 'start' ]);
+                    $b     = strtotime ($param[ 'start' ]) + 86400;
+                    $map[] = [ 'addtime' , 'between' , "$a,$b" ];
+                }
+            }
+
+        }
+
+        $list = Db ::name ('project_class') -> where ($map) -> order ('id' , 'asc') -> paginate (20 , false , [ 'query' => request () -> param () ]) -> each (function ( $item , $key ) {
+            $num = Db ::name ('project_info') -> where (array (
+                'p_id'        => $item[ 'id' ] ,
+                'status_true' => 2
+            )) -> count ();
+            if ( $num == 9 ) {
+                $item[ 'status' ] = 2;
+            }
+            else {
+                $item[ 'speed' ] = ( $num * 10 ) . '%';
+            }
+            return $item;
+        });
+        return $this -> fetch ('index' , [
+            'list'   => $list ,
+            'title'  => '项目管理' ,
+            'title2' => '项目列表' ,
+        ]);
+    }
+
     /**
      *项目列表主页
      * User: lanzh
@@ -50,20 +110,13 @@ class Project extends Common
 
         }
 
-        $list = Db ::name ('project') -> where ($map) -> order ('id' , 'asc') -> paginate (20 , false , [ 'query' => request () -> param () ]) -> each (function ( $item , $key ) {
-            $num = Db ::name ('project_info') -> where (array (
-                'p_id'        => $item[ 'id' ] ,
-                'status_true' => 2
-            )) -> count ();
-            if ( $num == 9 ) {
-                $item[ 'status' ] = 2;
-            }
-            else {
-                $item[ 'speed' ] = ( $num * 10 ) . '%';
-            }
+        $list = Db ::name ('project_class') -> where ($map) -> order ('id' , 'asc') -> paginate (20 , false , [ 'query' => request () -> param () ]) -> each (function ( $item , $key ) {
+
+            $item[ 'pid' ] = Db ::name ('project') -> where ('p_id' , $item[ 'id' ]) -> count ();
+
             return $item;
         });
-        return $this -> fetch ('index' , [
+        return $this -> fetch ('project_class' , [
             'list'   => $list ,
             'title'  => '项目管理' ,
             'title2' => '项目列表' ,
@@ -259,7 +312,7 @@ class Project extends Common
             $list[ $key ][ 'plan_end_time' ]   = empty($list[ $key ][ 'plan_end_time' ]) ? '未开始' : date ('Y-m-d H:i' , $list[ $key ][ 'plan_end_time' ]);
             $list[ $key ][ 'start_time' ]      = empty($list[ $key ][ 'start_time' ]) ? '未开始' : date ('Y-m-d H:i' , $list[ $key ][ 'start_time' ]);
             $list[ $key ][ 'end_time' ]        = empty($list[ $key ][ 'end_time' ]) ? '未开始' : date ('Y-m-d H:i' , $list[ $key ][ 'end_time' ]);
-            $list[ $key ][ 'speed' ]           = empty($list[ $key ][ 'speed' ]) ? '未开始' : $list[ $key ][ 'speed' ].'%';
+            $list[ $key ][ 'speed' ]           = empty($list[ $key ][ 'speed' ]) ? '未开始' : $list[ $key ][ 'speed' ] . '%';
             $sum                               += $list[ $key ][ 'price' ];
         }
         return $this -> fetch ('project_info' , [

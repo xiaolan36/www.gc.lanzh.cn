@@ -96,6 +96,13 @@ class Common extends Controller
                 'end'         => 'date' ,
                 'searchInput' => 'chsDash' ,
             ) ,
+            //项目列表
+            'project_class'             => array (
+                'statusifyID' => 'number' ,
+                'start'       => 'date' ,
+                'end'         => 'date' ,
+                'searchInput' => 'chsDash' ,
+            ) ,
             //添加项目
             'add_project'       => array (
                 'name|项目名称' => 'chsDash' ,
