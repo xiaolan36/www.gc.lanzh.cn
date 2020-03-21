@@ -196,9 +196,11 @@
                             </td>
                         </tr>
                         {/volist}
+                        <?php if($role==1):?>
                         <th scope="col" colspan="13" style="text-align: center; color:red; font-size:18px">实际总成本 :
                             {$sum} 元
                         </th>
+                        <?php endif?>
                         </tbody>
                     </table>
 

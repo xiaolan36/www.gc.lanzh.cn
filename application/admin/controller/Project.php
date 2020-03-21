@@ -412,6 +412,7 @@ class Project extends Common
         return $this -> fetch ('project_info' , [
             'list'   => $list ,
             'sum'    => $sum ,
+            'role'=>Session::get ('admin')['role'],
             'title'  => '项目管理' ,
             'title2' => '项目列表' ,
         ]);
@@ -520,6 +521,9 @@ class Project extends Common
         $auth    = Db ::name ('project_auth') -> where ('a_id' , $adminid[ 'id' ]) -> select ();
         foreach ( $auth as $key => $val ) {
             $data[] = $val[ 'u_id' ];
+        }
+        if ( empty($data) ) {
+            $this -> error ('你没有权限');
         }
         return $data;
     }
