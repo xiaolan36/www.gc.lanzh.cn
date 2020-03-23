@@ -412,7 +412,7 @@ class Project extends Common
         return $this -> fetch ('project_info' , [
             'list'   => $list ,
             'sum'    => $sum ,
-            'role'=>Session::get ('admin')['role'],
+            'role'   => Session ::get ('admin')[ 'role' ] ,
             'title'  => '项目管理' ,
             'title2' => '项目列表' ,
         ]);
@@ -464,6 +464,7 @@ class Project extends Common
      */
     public function save_project ()
     {
+//        exit(var_dump ($this->params));
         // 获取表单上传文件
         $files = request () -> file ('uploads');
         if ( !empty($files) ) {
@@ -500,8 +501,10 @@ class Project extends Common
         $this -> params[ 'plan_end_time' ]   = strtotime ($this -> params[ 'plan_end_time' ]);
         $this -> params[ 'start_time' ]      = strtotime ($this -> params[ 'start_time' ]);
         $this -> params[ 'end_time' ]        = strtotime ($this -> params[ 'end_time' ]);
+
         if ( Db ::name ('project_info') -> update ($this -> params) ) {
-            $this -> return_msg (200 , '提交成功');
+            $ids = Db ::name ('project_info') -> where ('id' , $this -> params[ 'id' ]) -> value ('p_id');
+            $this -> return_msg (200 , '提交成功' , array ( 'id' => $ids ));
         }
         else {
             $this -> return_msg (400 , '提交失败');

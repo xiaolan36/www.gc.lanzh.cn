@@ -272,7 +272,7 @@
                     success: function (data) {
                         if (data.code == 200) {
                             layer.msg(data.msg, {icon: 1, shade: 0.01, time: 2000}, function () {
-                                window.location.reload();
+                                window.location.href = "{:url('Project/project_info')}?ids=" + data.data.id;
                             });
                         } else {
                             layer.msg(data.msg);
